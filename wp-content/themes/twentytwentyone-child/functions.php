@@ -25,7 +25,7 @@ function normalize_attributes($atts) {
   return $atts;
 }
 
-function PHPcode ($atts, $content = '') {
+function logged_user ($atts, $content = '') {
   #include( TEMPLATEPATH . "/scripts/prueba.php" );
   $atts = normalize_attributes($atts);
   $current_user = wp_get_current_user();
@@ -44,15 +44,12 @@ function PHPcode ($atts, $content = '') {
   #return $response;
   return 'ID: ' . $atts['user_id'] . ' - Username: ' . $atts['username'] . ' - Email: ' . $atts['email'];
 }
-add_shortcode( 'pruebaphp', 'PHPcode' );
+add_shortcode( 'usuario_actual', 'logged_user' );
 
 // Load all the available scripts in the child theme
-$Directory = new RecursiveDirectoryIterator( get_template_directory() . 'scripts/' );
-$Iterator = new RecursiveIteratorIterator( $Directory );
-$Regex = new RegexIterator( $Iterator, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH );
-
-foreach( $Regex as $yourfiles ) {
-  include $yourfiles -> getPathname();
+foreach ( glob( get_template_directory() . "'/scripts/*.php" ) as $my_script ) {
+  $my_script = basename($my_scripts);
+  require get_template_directory() .  '/scripts/' . $my_script;
 }
 
 function twentytwentyone_child_widgets_init() {
