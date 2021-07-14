@@ -14,8 +14,35 @@ function enqueue_styles_child_theme() {
 }
 add_action( 'wp_enqueue_scripts', 'enqueue_styles_child_theme' );
 
-function PHPcode ($atts) {
-  include( TEMPLATEPATH . "/scripts/prueba.php" );
+function normalize_attributes($atts) {
+  foreach ($atts as $key => $value) {
+    if (is_int($key)) {
+      $atts[$value] = true;
+      unset( $atts[$key] );
+    }
+  }
+
+  return $atts;
+}
+
+function PHPcode ($atts, $content = '') {
+  #include( TEMPLATEPATH . "/scripts/prueba.php" );
+  $atts = normalize_attributes($atts);
+  $current_user = wp_get_current_user();
+  $atts = shortcode_atts(
+    array(
+      'user_id'  => $current_user -> ID,
+      'username' => $current_user -> user_login,
+      'email'    => $current_user -> user_email
+    ), $atts);
+  #$response = file_get_contents('http://vtiger.talecsystem.com/berliCRM_webserviceexamples.php?user_name=' . $username . '&accessKey=' . $accessKey);
+  #$username = $_POST['log'];
+  #$accessKey = $_POST['pwd'];
+  #$username = $_POST['user_login'];
+  #$accessKey = $_POST['user_pass'];
+  #$response = $username . ' ' . $accessKey;
+  #return $response;
+  return 'ID: ' . $atts['user_id'] . ' - Username: ' . $atts['username'] . ' - Email: ' . $atts['email'];
 }
 add_shortcode( 'pruebaphp', 'PHPcode' );
 
