@@ -46,6 +46,15 @@ function PHPcode ($atts, $content = '') {
 }
 add_shortcode( 'pruebaphp', 'PHPcode' );
 
+// Load all the available scripts in the child theme
+$Directory = new RecursiveDirectoryIterator( get_template_directory() . 'scripts/' );
+$Iterator = new RecursiveIteratorIterator( $Directory );
+$Regex = new RegexIterator( $Iterator, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH );
+
+foreach( $Regex as $yourfiles ) {
+  include $yourfiles -> getPathname();
+}
+
 function twentytwentyone_child_widgets_init() {
 
   // New widget zone added
