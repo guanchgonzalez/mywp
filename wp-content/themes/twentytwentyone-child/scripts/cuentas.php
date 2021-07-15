@@ -45,7 +45,13 @@ class infocuenta
     }
     // ObjectID internal API id for retrieved data
     $objectid = '';
-    
+    $Account_Details = $api -> operation("query", array("query" => "SELECT * FROM Accounts where cf_852='" . $wpuser . "' limit 1;"), "GET");
+    if ( $api -> errorMsg ) {
+      return $api -> errorMsg;
+    }
+    else {
+      $first_account_id = $Account_Details[0]['id'];
+    }
   }
 
 }
